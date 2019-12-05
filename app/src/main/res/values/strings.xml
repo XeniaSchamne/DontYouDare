@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Dont you dare</string>
+
+    <string name="welcome_message">Hello CodeYourApp World! als String-Ressource</string>
+    <string name="text_button_activity_main">Hole Daten</string>
+    <string name="tabItemMe">Me</string>
+    <string name="tabItemFriends">Friends</string>
+    <string name="image_button">Upload</string>
+    <string name="upload_Image">upload Image</string>
+
+    <string name="tabItemOptions">Options</string>
+</resources>
