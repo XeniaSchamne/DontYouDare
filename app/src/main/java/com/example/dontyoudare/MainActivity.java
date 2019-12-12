@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    //Methode zum öffnen der Kamera
     private void openCamera(){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    // Permission Anfrage
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
+    // Test ob unser Permissionergebnis OK ist und wenn ja, upload des aufgenommenen Bildes
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK){
