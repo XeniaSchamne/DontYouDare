@@ -3,12 +3,14 @@
 <!-- Relatives Layout, in dem wir Tabs und Buttons einlagern -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <!-- Tableiste am oberen Bildrand -->
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="62dp">
 
@@ -16,48 +18,29 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tabItemMe" />
+            android:id="@+id/tabStart"
+            android:text="@string/tabItemStart" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:text="@string/tabItemMe"
+            android:focusable="true" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tabFriends"
             android:text="@string/tabItemFriends" />
     </com.google.android.material.tabs.TabLayout>
 
-
-    <!-- Galerie Button -->
-    <ImageButton
-        android:id="@+id/gallery_button"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        android:contentDescription="@string/gallery"
-        android:layout_alignParentEnd="true" />
-
-
-    <!-- Button zum Hochladen eines Bildes -->
-    <ImageButton
-        android:id="@+id/image_button"
-        android:layout_width="214dp"
-        android:layout_height="201dp"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentBottom="false"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false"
-        android:layout_marginTop="230dp"
-        android:contentDescription="@string/tabItemMe"
-        android:scaleType="centerInside"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
-
-    <!-- Option-Menü-Button -->
-    <ImageButton
-            android:id="@+id/optionButton"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:srcCompat="@android:drawable/ic_menu_preferences"
-            android:contentDescription="@string/option" />
+    <!-- ViewPager -->
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewpager" />
 
 </RelativeLayout>

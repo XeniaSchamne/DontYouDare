@@ -1,9 +1,8 @@
 package com.example.dontyoudare;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.XmlRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.ContentValues;
@@ -13,21 +12,27 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.service.autofill.OnClickAction;
 import android.view.View;
-import android.view.textclassifier.TextClassifierEvent;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.Permission;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
+
 
 public class MainActivity extends AppCompatActivity{
 
     private static final int PERMISSION_CODE = 1000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
     ImageButton uploadImageBtn;
-    Uri image_uri;
+    static Uri image_uri;
+
+    /* Attribute, die für die Tabs benötigt werden */
+
+    private TabLayout tablayout;
+    private ViewPager viewPager;
+    private TabItem me,friends, start;
+    public PageAdapter pageAdapter;
 
 
     @Override
@@ -36,8 +41,51 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 
+        /* Fragments */
+        tablayout = findViewById(R.id.tablayout);
+        me = findViewById(R.id.tabMe);
+        friends = findViewById(R.id.tabFriends);
+        start = findViewById(R.id.tabStart);
+        viewPager = findViewById(R.id.viewpager);
 
-        uploadImageBtn = findViewById(R.id.image_button);
+        pageAdapter = new PageAdapter(getSupportFragmentManager(), tablayout.getTabCount());
+        viewPager.setAdapter(pageAdapter);
+
+        tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                if (tab.getPosition() == 0) {
+                    pageAdapter.notifyDataSetChanged();
+                    Start f = new Start();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+                } else if (tab.getPosition() == 1) {
+                    pageAdapter.notifyDataSetChanged();
+                    Me f = new Me();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+                } else if (tab.getPosition() == 2) {
+                    pageAdapter.notifyDataSetChanged();
+                    Friends f = new Friends();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
+
+
+/*        uploadImageBtn = findViewById(R.id.image_button);
         uploadImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,20 +97,20 @@ public class MainActivity extends AppCompatActivity{
                     }
                     else{
                         openCamera();
-                        
+
                     }
                 }
                 else{
                     openCamera();
                 }
             }
-        });
+        }); */
 
 
     }
 
     //Methode zum öffnen der Kamera
-    private void openCamera(){
+    public void openCamera(){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
@@ -83,15 +131,9 @@ public class MainActivity extends AppCompatActivity{
                     openCamera();
                 }else{
                     Toast.makeText(this, "PERMISSION DENIED", Toast.LENGTH_SHORT).show();
-
-
                 }
-
             }
-
-    }
-
-
+        }
     }
 
     // Test ob unser Permissionergebnis OK ist und wenn ja, upload des aufgenommenen Bildes
