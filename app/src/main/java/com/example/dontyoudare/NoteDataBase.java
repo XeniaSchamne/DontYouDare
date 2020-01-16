@@ -44,9 +44,9 @@ public abstract class NoteDataBase extends RoomDatabase {
         // Beispiele zum Anzeigen von Listeneinträge beim ersten Erstellen der Seite
         @Override
         protected Void doInBackground(Void... voids){
-            noteDao.insert(new Note("Title 1", "Description 1",  1));
-            noteDao.insert(new Note("Lukas stinkt", "ganz schlimm",  2));
-            noteDao.insert(new Note("Gestank Stufe 5", "Höchste Alarmbereitschaft",  3));
+          //  noteDao.insert(new Note("Title 1", "Description 1",  1));
+          //  noteDao.insert(new Note("Lukas stinkt", "ganz schlimm",  2));
+          //  noteDao.insert(new Note("Gestank Stufe 5", "Höchste Alarmbereitschaft",  3));
             return null;
         }
 

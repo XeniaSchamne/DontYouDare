@@ -60,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
                 if (tab.getPosition() == 0) {
                     pageAdapter.notifyDataSetChanged();
                     Start f = new Start();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.me, f).commit();
                 } else if (tab.getPosition() == 1) {
                     pageAdapter.notifyDataSetChanged();
                     Me f = new Me();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.starttab, f).commit();
                 } else if (tab.getPosition() == 2) {
                     pageAdapter.notifyDataSetChanged();
                     Friends f = new Friends();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, f).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.me, f).commit();
 
                 }
             }

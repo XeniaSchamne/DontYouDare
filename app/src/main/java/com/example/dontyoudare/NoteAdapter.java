@@ -15,7 +15,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     private List<Note>notes = new ArrayList<>();
 
     @NonNull
-    @Override
+    @Override //Hier könnte der fehler sein :D
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_item, parent,false);
@@ -41,6 +41,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         notifyDataSetChanged();
     }
 
+    public Note getNoteAt(int position){
+        return notes.get(position);
+    }
+
     class NoteHolder extends RecyclerView.ViewHolder{
         private TextView textViewTitle;
         private TextView textViewDescription;
@@ -52,5 +56,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Note note);
     }
 }

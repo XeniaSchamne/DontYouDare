@@ -2,6 +2,7 @@
 
 <!-- Relatives Layout, in dem wir Tabs und Buttons einlagern -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/starttab"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
