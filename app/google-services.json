@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "816775367839",
+    "firebase_url": "https://dont-you-dare.firebaseio.com",
+    "project_id": "dont-you-dare",
+    "storage_bucket": "dont-you-dare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816775367839:android:b6ea8822fefe252bdd66aa",
+        "android_client_info": {
+          "package_name": "com.example.dontyoudare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816775367839-rg5c4e07qhbtv6quatn5qert0s88ngci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dontyoudare",
+            "certificate_hash": "d502587af59b84910a7f4f68fdf0deb888b4545e"
+          }
+        },
+        {
+          "client_id": "816775367839-f8p7k0jp116k9mbd6rt44gsnauap32ss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7IsO8zJvJc_l2yr5W1Re446CPM-cptC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816775367839-f8p7k0jp116k9mbd6rt44gsnauap32ss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabItem me, friends, start;
     public PageAdapter pageAdapter;
+
+    // Attribute, die für die Authentifizierung in Firebase benötigt werden
+    private FirebaseUser currentUser;
 
 
     @Override
@@ -86,5 +90,24 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
 
+    }
+
+    //Firebase Methoden
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(currentUser == null){
+            SendUserToLoginActivity();
+        }
+
+    }
+
+
+
+    private void SendUserToLoginActivity() {
+        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(logIntent);
     }
 }
