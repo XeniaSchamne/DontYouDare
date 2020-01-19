@@ -1,19 +1,30 @@
 package com.example.dontyoudare;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
+    private ProgressDialog loadingBar;
+
     private Button LoginButton, PhoneLoginButton;
     private EditText UserEmail, UserPasswort;
     private TextView NeednewAccountLink, ForgetPasswordLink;
@@ -24,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         InitializeFields();
 
         NeednewAccountLink.setOnClickListener(new View.OnClickListener() {
@@ -33,8 +46,43 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        LoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AllowUserToLogin();
+            }
+        });
 
 
+
+    }
+
+    private void AllowUserToLogin() {
+        String email = UserEmail.getText().toString();
+        String password = UserPasswort.getText().toString();
+
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Bitte alle Felder ausfüllen",Toast.LENGTH_SHORT).show();
+        }else{
+            loadingBar.setTitle("Wir loggen Dich ein");
+            loadingBar.setMessage("Bitte warten, Account wird eingeloggt");
+            loadingBar.setCanceledOnTouchOutside(true);
+            loadingBar.show();
+            mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        SendUserToMainActivity();
+                        Toast.makeText(LoginActivity.this,"Erfolgreich eingeloggt - Schieß los!",Toast.LENGTH_SHORT).show();
+                        loadingBar.dismiss();
+                    }else{
+                        String message = task.getException().toString();
+                        Toast.makeText(LoginActivity.this, "Error: "+ message , Toast.LENGTH_SHORT ).show();
+                        loadingBar.dismiss();
+                    }
+                }
+            });
+        }
     }
 
     private void InitializeFields() {
@@ -44,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         UserPasswort = findViewById(R.id.login_password);
         NeednewAccountLink = findViewById(R.id.need_new_acc_link);
         ForgetPasswordLink = findViewById(R.id.forget_password_link);
+        loadingBar = new ProgressDialog(this);
     }
 
     // Check ob der User bereits angemeldet ist
@@ -61,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent logIntent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(logIntent);
     }
+
 
     private void SendUserToRegisterActivity() {
         Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
