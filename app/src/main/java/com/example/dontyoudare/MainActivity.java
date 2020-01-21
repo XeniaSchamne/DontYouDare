@@ -1,28 +1,17 @@
 package com.example.dontyoudare;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
-import android.Manifest;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -44,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     // Attribute, die für die Authentifizierung in Firebase benötigt werden
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-
+    private NoteViewModel noteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         pageAdapter = new PageAdapter(getSupportFragmentManager(), tablayout.getTabCount());
         viewPager.setAdapter(pageAdapter);
+
+        /*TabLayout*/
 
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -100,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
 
+        /*NoteViewModel*/
+        final NoteAdapter adapter = new NoteAdapter();
+
+        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable List<Note> notes) {
+                adapter.submitList(notes);
+
+            }
+        });
+
     }
 
     //Firebase Methoden
@@ -133,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.delete_all_notes:
-                //TODO Methode zum Löschen & Toast
+                noteViewModel.deleteAllNotes();
+                Toast.makeText(this, "Alle Aufgaben gelöscht", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.main_find_friends_option:
+                //TODO muss noch implementiert werden
                 return true;
             case R.id.main_logout_option:
                 mAuth.signOut();
