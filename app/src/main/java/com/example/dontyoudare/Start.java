@@ -1,32 +1,15 @@
 package com.example.dontyoudare;
 
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.fragment.app.Fragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,8 +39,12 @@ public class Start extends Fragment {
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_start, container, false);
+        UpdateAccountSettings = v.findViewById(R.id.update_settings_button);
+        userName = v.findViewById(R.id.set_user_name);
+        userStatus = v.findViewById(R.id.set_profile_status);
+        userProfileImage = v.findViewById(R.id.set_profile_image);
 
-        InitializeFields();
+       // InitializeFields();
        /* uploadImageBtn = v.findViewById(R.id.image_button);
         uploadImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +66,9 @@ public class Start extends Fragment {
         return v;
     }
 
-    private void InitializeFields() {
-        UpdateAccountSettings = (Button) getView().findViewById(R.id.update_settings_button);
-        userName = getView().findViewById(R.id.set_user_name);
-        userStatus = getView().findViewById(R.id.set_profile_status);
-        userProfileImage = getView().findViewById(R.id.set_profile_image);
-    }
 
     //Methode zum öffnen der Kamera
-    public void openCamera(){
+   /* public void openCamera(){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
