@@ -17,6 +17,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -116,5 +119,30 @@ public class MainActivity extends AppCompatActivity {
     private void SendUserToLoginActivity() {
         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(logIntent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.me_menu,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.delete_all_notes:
+                //TODO Methode zum Löschen & Toast
+                return true;
+            case R.id.main_find_friends_option:
+                return true;
+            case R.id.main_logout_option:
+                mAuth.signOut();
+                SendUserToLoginActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

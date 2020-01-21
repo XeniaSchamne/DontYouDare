@@ -11,16 +11,24 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -30,7 +38,9 @@ public class Start extends Fragment {
 
     private static final int PERMISSION_CODE = 1000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
-    ImageButton uploadImageBtn;
+    private Button UpdateAccountSettings;
+    private EditText userName, userStatus;
+    private CircleImageView userProfileImage;
     static Uri image_uri;
 
     public Start() {
@@ -42,10 +52,13 @@ public class Start extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_start, container, false);
 
-        uploadImageBtn = v.findViewById(R.id.image_button);
+        InitializeFields();
+       /* uploadImageBtn = v.findViewById(R.id.image_button);
         uploadImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,9 +75,17 @@ public class Start extends Fragment {
                     openCamera();
                 }
             }
-        });
+        });*/
         return v;
     }
+
+    private void InitializeFields() {
+        UpdateAccountSettings = (Button) getView().findViewById(R.id.update_settings_button);
+        userName = getView().findViewById(R.id.set_user_name);
+        userStatus = getView().findViewById(R.id.set_profile_status);
+        userProfileImage = getView().findViewById(R.id.set_profile_image);
+    }
+
     //Methode zum öffnen der Kamera
     public void openCamera(){
         ContentValues values = new ContentValues();
@@ -93,10 +114,11 @@ public class Start extends Fragment {
     }
 
     // Test ob unser Permissionergebnis OK ist und wenn ja, upload des aufgenommenen Bildes
-    @Override
+  /*  @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             uploadImageBtn.setImageURI(image_uri);
         }
-    }
+    }*/
+
 }
