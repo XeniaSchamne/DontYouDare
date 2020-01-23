@@ -23,12 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisterActivity extends AppCompatActivity {
 
     private Button CreateAccountButton;
-    private EditText UserEmail, UserPasswort;
+    private EditText UserEmail, UserPasswort, Username;
     private TextView AlreadyHaveAccountLink;
 
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef;
     private ProgressDialog loadingBar;
+    Users user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-        RootRef = FirebaseDatabase.getInstance().getReference();
+        user = new Users();
+        RootRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
         InitializeFields();
@@ -73,7 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         String currentUserID = mAuth.getCurrentUser().getUid();
-                        RootRef.child("Users").child(currentUserID).setValue("");
+                      //  String currUserName = mAuth.getCurrentUser().getEmail();
+                      // RootRef.child("Users").child(currentUserID).setValue(currUserName);
+                      //  RootRef.child("Users").child(currentUserID).getDatabase();
+                        user.setUser(Username.getText().toString().trim());
+                        user.setEmail(UserEmail.getText().toString().trim());
+                        user.setUserId(currentUserID);
+
+                        RootRef.push().setValue(user);
+
 
                         SendUserToMainActivity();
                         Toast.makeText(RegisterActivity.this,"Account erfolgreich erstellt",Toast.LENGTH_SHORT).show();
@@ -93,6 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void InitializeFields() {
         CreateAccountButton = findViewById(R.id.register_button);
         UserEmail = findViewById(R.id.register_email);
+        Username = findViewById(R.id.register_username);
         UserPasswort = findViewById(R.id.register_password);
         AlreadyHaveAccountLink = findViewById(R.id.already_have_acc_link);
         loadingBar = new ProgressDialog(this);
