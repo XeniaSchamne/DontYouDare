@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/friends"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Friends">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/text"
+    <ListView
+        android:id="@+id/list_view"
+        android:paddingTop="60dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:text="@string/lukas_ist_ne_bitch"
-        android:textColor="#0C0C0C"
-        android:textSize="36sp"
-        android:textStyle="bold" />
-
-</FrameLayout>
+        android:layout_height="match_parent" />
+</RelativeLayout>
