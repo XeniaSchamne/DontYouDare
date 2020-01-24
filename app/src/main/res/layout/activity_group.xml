@@ -5,13 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GroupActivity">
+    <ListView
+        android:id="@+id/list_view"
+        android:paddingTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
+   <!-- <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        />-->
     <!-- listitem Beim Ausführen nicht gebraucht, nur für eine Vorschau -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
