@@ -80,9 +80,6 @@ public class RegisterActivity extends AppCompatActivity {
                         user.setUserId(currentUserID);
                         RootRef.push().setValue(user);
 
-
-
-
                         SendUserToMainActivity();
                         Toast.makeText(RegisterActivity.this,"Account erfolgreich erstellt",Toast.LENGTH_SHORT).show();
                         loadingBar.dismiss();
@@ -91,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Error: "+ message , Toast.LENGTH_SHORT ).show();
                         loadingBar.dismiss();
                     }
+                    RootRef.child(userName).setValue(user);
 
                 }
             });
