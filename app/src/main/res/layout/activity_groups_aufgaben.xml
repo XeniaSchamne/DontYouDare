@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/me"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GroupsAufgaben">
+    <ListView
+        android:id="@+id/list_view"
+        android:paddingTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- RecyclerView -->
+    <!-- <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/recycler_view"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         />-->
+    <!-- listitem Beim Ausführen nicht gebraucht, nur für eine Vorschau -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/person_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start|left"
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_person" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_add_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

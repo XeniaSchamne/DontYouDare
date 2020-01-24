@@ -24,14 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class GroupActivity extends AppCompatActivity {
 
-    private String member;
+    private Users member;
     private DatabaseReference findUser;
-    private String currentGroupName;
     private FirebaseAuth mAuth;
     TextView a, b;
 
@@ -52,8 +50,8 @@ public class GroupActivity extends AppCompatActivity {
         list_view.setAdapter(arrayAdapter);
 
 
-        currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
-        Toast.makeText(this, currentGroupName, Toast.LENGTH_SHORT).show();
+        //currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
+        //Toast.makeText(this, currentGroupName, Toast.LENGTH_SHORT).show();
 
         FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
@@ -85,17 +83,28 @@ public class GroupActivity extends AppCompatActivity {
                     findUser.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Set<String> set = new HashSet<>();
-                            Iterator iterator = dataSnapshot.getChildren().iterator();
+                            Set<String> set = new HashSet<String>();
+                           // Iterator iterator = dataSnapshot.getChildren().iterator();
 
                             String Username = UserNameField.getText().toString();
 
+                            for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                                Users users = childSnapshot.getValue(Users.class);
+                                set.add(users.getUser());
+                                if(set.contains(Username)){
+                                    member = users;
+                                }
+                            }
+                            list_of_groups.clear();
+                           // list_of_groups.addAll(member.getUser().toString());
+                            arrayAdapter.notifyDataSetChanged();
 
-                            while (iterator.hasNext()) {
+                        /*   while (iterator.hasNext()) {
                                 // member = iterator.toString();
                                 set.add(((DataSnapshot) iterator.next()).getKey());
                                 if (set.contains("-LzMYcpgoH2wSzQHEv6i")) {
                                     for (String s:set){
+                                        for(String p : dataSnapshot.getChildren())
                                         if (s.equalsIgnoreCase(Username)) {
                                             s = Username;
                                         }
@@ -106,7 +115,7 @@ public class GroupActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(GroupActivity.this, "Person nicht gefunden BITCH", Toast.LENGTH_SHORT).show();
                                 }
-                            }
+                            }*/
                         }
 
                         @Override
@@ -114,23 +123,6 @@ public class GroupActivity extends AppCompatActivity {
 
                         }
                     });
-       /*             findUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            member = dataSnapshot.child("user").getValue().toString();
-                            String Username = UserNameField.getText().toString();
-                            a.setText(member);
-                            b.setText(Username);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });*/
-
-                    //String member = findUser.child("").child("user").toString();
-                    // addUserToGroup(Username, member);
                 }
             }
         });

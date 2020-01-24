@@ -1,8 +1,5 @@
 package com.example.dontyoudare;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,12 +36,11 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        InitializeFields();
+
         mAuth = FirebaseAuth.getInstance();
         user = new Users();
         RootRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-        InitializeFields();
 
         AlreadyHaveAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void CreateNewAccount() {
-        String email = UserEmail.getText().toString();
+        final String email = UserEmail.getText().toString();
         String password = UserPasswort.getText().toString();
+        final String userName = Username.getText().toString();
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
             Toast.makeText(this,"Bitte alle Felder ausfüllen",Toast.LENGTH_SHORT).show();
@@ -75,14 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         String currentUserID = mAuth.getCurrentUser().getUid();
-                      //  String currUserName = mAuth.getCurrentUser().getEmail();
-                      // RootRef.child("Users").child(currentUserID).setValue(currUserName);
-                      //  RootRef.child("Users").child(currentUserID).getDatabase();
                         user.setUser(Username.getText().toString().trim());
                         user.setEmail(UserEmail.getText().toString().trim());
                         user.setUserId(currentUserID);
-
                         RootRef.push().setValue(user);
+
+
 
 
                         SendUserToMainActivity();
