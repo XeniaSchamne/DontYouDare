@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Error: "+ message , Toast.LENGTH_SHORT ).show();
                         loadingBar.dismiss();
                     }
-                    RootRef.child(mAuth.getCurrentUser().getEmail().toString()).setValue(user);
+                     RootRef.child(userName).setValue(user);
 
 
 

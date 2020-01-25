@@ -21,15 +21,11 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,6 +48,7 @@ public class Start extends Fragment {
     private FirebaseAuth mAuth;
     private String currentUserId;
     private StorageReference UserProfileImageRef;
+    private String email;
 
 
     public Start() {
@@ -68,15 +65,13 @@ public class Start extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_start, container, false);
 
+        RootRef = FirebaseDatabase.getInstance().getReference();
+
         UpdateAccountSettings = v.findViewById(R.id.update_settings_button);
         userName = v.findViewById(R.id.set_user_name);
         userStatus = v.findViewById(R.id.set_profile_status);
         userProfileImage = v.findViewById(R.id.set_profile_image);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUserId = mAuth.getCurrentUser().getUid();
-
-        RootRef = FirebaseDatabase.getInstance().getReference();
         UserProfileImageRef = FirebaseStorage.getInstance().getReference().child("profile Images");
 
 
@@ -135,7 +130,7 @@ public class Start extends Fragment {
                         final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
 
 
-                        RootRef.child("Users").child(mAuth.getCurrentUser().getEmail()).child("image").setValue(downloadUrl)
+                        RootRef.child("Users").child("tester").child("image").setValue(downloadUrl)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
