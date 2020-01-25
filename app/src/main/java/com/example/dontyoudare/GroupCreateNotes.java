@@ -8,15 +8,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CreateNotesFriends extends AppCompatActivity {
+public class GroupCreateNotes extends AppCompatActivity {
 
     private EditText aufgabeUser, rulesUser;
     private ImageView proofpicUser;
@@ -44,9 +41,8 @@ public class CreateNotesFriends extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 createNewTask();
-                Toast.makeText(CreateNotesFriends.this, currentGroupName,Toast.LENGTH_SHORT).show();
+                Toast.makeText(GroupCreateNotes.this, currentGroupName,Toast.LENGTH_SHORT).show();
                 sendUserToGroupAufgabe();
             }
         });
@@ -58,7 +54,7 @@ public class CreateNotesFriends extends AppCompatActivity {
     }
 
     private void sendUserToGroupAufgabe() {
-        Intent intent = new Intent(CreateNotesFriends.this, GroupsAufgaben.class);
+        Intent intent = new Intent(GroupCreateNotes.this,GroupsAufgaben.class);
         startActivity(intent);
     }
 

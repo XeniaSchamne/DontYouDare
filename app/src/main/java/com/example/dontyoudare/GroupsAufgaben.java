@@ -3,6 +3,7 @@ package com.example.dontyoudare;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,9 +38,10 @@ public class GroupsAufgaben extends AppCompatActivity {
         setContentView(R.layout.activity_groups_aufgaben);
         groupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
-        list_view = findViewById(R.id.list_view); //FEHerquelle
+        list_view = findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
+
         currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
         Toast.makeText(this, currentGroupName, Toast.LENGTH_SHORT).show();
 
@@ -48,12 +50,27 @@ public class GroupsAufgaben extends AppCompatActivity {
 
 
         RetrieveAndDisplayTasks();
+
+        //OnClickListener um Aufgaben hinzuzufügen
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notesFriends = new Intent(GroupsAufgaben.this,CreateNotesFriends.class);
+                Intent notesFriends = new Intent(GroupsAufgaben.this, GroupCreateNotes.class);
                 notesFriends.putExtra("Groupname", currentGroupName);
                 startActivity(notesFriends);
+            }
+        });
+
+        //OnClickListener um Aufgaben zu bearbeiten
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String currentTaskName = parent.getItemAtPosition(position).toString();
+
+                Intent taskIntent = new Intent(GroupsAufgaben.this, GroupTaskUpdateActivity.class);
+                taskIntent.putExtra("Aufgabe", currentTaskName);
+                taskIntent.putExtra("Groupname", currentGroupName);
+                startActivity(taskIntent);
             }
         });
 
