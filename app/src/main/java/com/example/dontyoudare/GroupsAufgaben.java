@@ -29,7 +29,7 @@ public class GroupsAufgaben extends AppCompatActivity {
     private ArrayList<String> list_of_groups = new ArrayList<>();
     private DatabaseReference groupRef;
     private String currentGroupName;
-    public static final String EXTRA_GROUP = "com.example.dontyoudare.EXTRA_GROUP";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class GroupsAufgaben extends AppCompatActivity {
         groupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
         list_view = findViewById(R.id.list_view); //FEHerquelle
- //       arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_of_groups);
- //       list_view.setAdapter(arrayAdapter);
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_of_groups);
+        list_view.setAdapter(arrayAdapter);
         currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
         Toast.makeText(this, currentGroupName, Toast.LENGTH_SHORT).show();
 
@@ -47,11 +47,12 @@ public class GroupsAufgaben extends AppCompatActivity {
         FloatingActionButton addNote = findViewById(R.id.button_add_note);
 
 
-   //     RetrieveAndDisplayGroups();
+        RetrieveAndDisplayTasks();
         addNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent notesFriends = new Intent(GroupsAufgaben.this,CreateNotesFriends.class);
+                notesFriends.putExtra("Groupname", currentGroupName);
                 startActivity(notesFriends);
             }
         });
@@ -65,12 +66,11 @@ public class GroupsAufgaben extends AppCompatActivity {
 
     private void SendUserToGroupActivity() {
         Intent groupChatIntent = new Intent(this, GroupActivity.class);
-        groupChatIntent.putExtra(Intent.EXTRA_TEXT, currentGroupName);
         startActivity(groupChatIntent);
     }
 
-    private void RetrieveAndDisplayGroups(){
-        groupRef.addValueEventListener(new ValueEventListener() {
+    private void RetrieveAndDisplayTasks(){
+        groupRef.child(currentGroupName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Set<String> set = new HashSet<>();

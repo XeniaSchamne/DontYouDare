@@ -22,6 +22,7 @@ public class CreateNotesFriends extends AppCompatActivity {
     private ImageView proofpicUser;
     private DatabaseReference RootRef;
     private Task1 task1;
+    private String currentGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class CreateNotesFriends extends AppCompatActivity {
         setContentView(R.layout.activity_create_notes_friends);
 
 
-
+        currentGroupName = getIntent().getExtras().get("Groupname").toString();
         RootRef = FirebaseDatabase.getInstance().getReference().child("Groups");
         Button button = findViewById(R.id.send_button);
         aufgabeUser = findViewById(R.id.group_aufgabe_titel);
@@ -38,16 +39,15 @@ public class CreateNotesFriends extends AppCompatActivity {
 
 
 
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = getIntent();
-                String groupName = intent.getStringExtra(GroupsAufgaben.EXTRA_GROUP);
 
-                //createNewTask(groupName);
-                Toast.makeText(CreateNotesFriends.this, groupName,Toast.LENGTH_SHORT).show();
-                //sendUserToGroupAufgabe();
+                createNewTask();
+                Toast.makeText(CreateNotesFriends.this, currentGroupName,Toast.LENGTH_SHORT).show();
+                sendUserToGroupAufgabe();
             }
         });
 
@@ -63,11 +63,11 @@ public class CreateNotesFriends extends AppCompatActivity {
     }
 
 
-    private void createNewTask(String groupName) {
+    private void createNewTask() {
 
         String titel = aufgabeUser.getText().toString().trim();
         String rules = rulesUser.getText().toString().trim();
-        RootRef.child(groupName).child(titel).setValue(rules);
+        RootRef.child(currentGroupName).child(titel).setValue(rules);
 
     }
 
