@@ -29,6 +29,7 @@ public class GroupsAufgaben extends AppCompatActivity {
     private ArrayList<String> list_of_groups = new ArrayList<>();
     private DatabaseReference groupRef;
     private String currentGroupName;
+    public static final String EXTRA_GROUP = "com.example.dontyoudare.EXTRA_GROUP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class GroupsAufgaben extends AppCompatActivity {
 
     private void SendUserToGroupActivity() {
         Intent groupChatIntent = new Intent(this, GroupActivity.class);
+        groupChatIntent.putExtra(Intent.EXTRA_TEXT, currentGroupName);
         startActivity(groupChatIntent);
     }
 
