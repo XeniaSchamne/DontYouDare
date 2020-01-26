@@ -45,7 +45,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
     private StorageReference UserProofImageRef;
     private FirebaseStorage storage;
     private StorageReference pathReference;
-   // private String ImageUrl;
+    private String ImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
         rulesUser = findViewById(R.id.group_aufgabe_regeln);
         proofPicUser = findViewById(R.id.set_proof_image);
 
-     //   storage = FirebaseStorage.getInstance();
+        // storage = FirebaseStorage.getInstance();
      /*   UserProofImageRef = storage.getReference().child(currentGroupName + "/")
                 .child(currentTaskName + "/")
                 .child("images/")
@@ -74,9 +74,9 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String rules = dataSnapshot.child("regel").getValue().toString();
-                String ImageUrl = dataSnapshot.child("images").getValue().toString();
+                ImageUrl = dataSnapshot.child("images").getValue().toString();
                 rulesUser.setText(rules);
-                Picasso.get().load(ImageUrl).into(proofPicUser);
+                //   Picasso.get().load(ImageUrl).into(proofPicUser);
             }
 
             @Override
@@ -85,18 +85,6 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
             }
 
         });
-
-     /*   RootRef.child(currentGroupName).child(currentTaskName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ImageUrl = dataSnapshot.child("images").getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
 
 
         textView.setText(currentTaskName);
@@ -108,10 +96,9 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
             }
         });
 
-//        Picasso.get().load(ImageUrl).into(proofPicUser);
-        Toast.makeText(this, UserProofImageRef.toString(), Toast.LENGTH_SHORT).show();
 
-
+        Picasso.get().load(ImageUrl).into(proofPicUser);
+        //  Toast.makeText(this, UserProofImageRef.toString(), Toast.LENGTH_SHORT).show();
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +110,6 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void sendUserToGroupAufgabe() {
@@ -141,7 +126,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
     }
 
     //Methode zum öffnen der Kamera
-    public void openCamera(){
+    public void openCamera() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
@@ -157,11 +142,11 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
     // Permission Anfrage
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSION_CODE:{
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case PERMISSION_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera();
-                }else{
+                } else {
                     Toast.makeText(GroupTaskUpdateActivity.this, "PERMISSION DENIED", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -180,25 +165,25 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
             filePath.putFile(image_uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         Toast.makeText(GroupTaskUpdateActivity.this, "Bild erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
 
-                       final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
+                        final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
 
 
                         RootRef.child(currentGroupName).child(currentTaskName).child("images").setValue(downloadUrl)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
+                                        if (task.isSuccessful()) {
                                             Toast.makeText(GroupTaskUpdateActivity.this, "Bild gespeichert", Toast.LENGTH_SHORT).show();
-                                        }else{
+                                        } else {
                                             String message = task.getException().toString();
                                             Toast.makeText(GroupTaskUpdateActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
-                    }else {
+                    } else {
                         String message = task.getException().toString();
                         Toast.makeText(GroupTaskUpdateActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                     }
