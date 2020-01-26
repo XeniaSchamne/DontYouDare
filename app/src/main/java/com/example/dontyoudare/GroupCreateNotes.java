@@ -55,6 +55,7 @@ public class GroupCreateNotes extends AppCompatActivity {
 
     private void sendUserToGroupAufgabe() {
         Intent intent = new Intent(GroupCreateNotes.this,GroupsAufgaben.class);
+        intent.putExtra("Gruppenname", currentGroupName);
         startActivity(intent);
     }
 
@@ -63,7 +64,9 @@ public class GroupCreateNotes extends AppCompatActivity {
 
         String titel = aufgabeUser.getText().toString().trim();
         String rules = rulesUser.getText().toString().trim();
-        RootRef.child(currentGroupName).child(titel).setValue(rules);
+        RootRef.child(currentGroupName).child(titel).child("regel").setValue(rules);
+        RootRef.child(currentGroupName).child(titel).child("images").setValue("");
+
 
     }
 
