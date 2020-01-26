@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import static com.example.dontyoudare.Start.image_uri;
 
@@ -38,9 +39,13 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
     private String currentGroupName;
     private String rules;
 
+
     private static final int PERMISSION_CODE = 1000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
     private StorageReference UserProofImageRef;
+    private FirebaseStorage storage;
+    private StorageReference pathReference;
+   // private String ImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +57,26 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
         currentGroupName = getIntent().getExtras().get("Groupname").toString();
 
         RootRef = FirebaseDatabase.getInstance().getReference().child("Groups");
+
         Button button = findViewById(R.id.send_button);
         textView = findViewById(R.id.group_aufgabe_titel);
         rulesUser = findViewById(R.id.group_aufgabe_regeln);
         proofPicUser = findViewById(R.id.set_proof_image);
-        UserProofImageRef = FirebaseStorage.getInstance().getReference().child(currentGroupName).child(currentTaskName);
 
-        RootRef.child(currentGroupName).child(currentTaskName).child("regel").addValueEventListener(new ValueEventListener() {
+     //   storage = FirebaseStorage.getInstance();
+     /*   UserProofImageRef = storage.getReference().child(currentGroupName + "/")
+                .child(currentTaskName + "/")
+                .child("images/")
+                .child(currentTaskName + ".jpg");
+        pathReference = UserProofImageRef.child(currentGroupName+"/" + currentTaskName+"/"+currentTaskName +".jpg");*/
+
+        RootRef.child(currentGroupName).child(currentTaskName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String rules = dataSnapshot.getValue().toString();
+                String rules = dataSnapshot.child("regel").getValue().toString();
+                String ImageUrl = dataSnapshot.child("images").getValue().toString();
                 rulesUser.setText(rules);
+                Picasso.get().load(ImageUrl).into(proofPicUser);
             }
 
             @Override
@@ -72,13 +86,31 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
 
         });
 
+     /*   RootRef.child(currentGroupName).child(currentTaskName).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ImageUrl = dataSnapshot.child("images").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
+
+
         textView.setText(currentTaskName);
         proofPicUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 openCamera();
             }
         });
+
+//        Picasso.get().load(ImageUrl).into(proofPicUser);
+        Toast.makeText(this, UserProofImageRef.toString(), Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -141,7 +173,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            proofPicUser.setImageURI(image_uri);
+            //proofPicUser.setImageURI(image_uri);
 
             StorageReference filePath = UserProofImageRef.child(currentTaskName + ".jpg");
 
@@ -151,7 +183,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
                     if(task.isSuccessful()) {
                         Toast.makeText(GroupTaskUpdateActivity.this, "Bild erfolgreich aktualisiert", Toast.LENGTH_SHORT).show();
 
-                        final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
+                       final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
 
 
                         RootRef.child(currentGroupName).child(currentTaskName).child("images").setValue(downloadUrl)
