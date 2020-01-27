@@ -83,11 +83,12 @@ public class GroupsAufgaben extends AppCompatActivity {
 
     private void SendUserToGroupActivity() {
         Intent groupChatIntent = new Intent(this, GroupActivity.class);
+        groupChatIntent.putExtra("Gruppenname", currentGroupName);
         startActivity(groupChatIntent);
     }
 
     private void RetrieveAndDisplayTasks(){
-        groupRef.child(currentGroupName).addValueEventListener(new ValueEventListener() {
+        groupRef.child(currentGroupName).child("Tasks").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Set<String> set = new HashSet<>();

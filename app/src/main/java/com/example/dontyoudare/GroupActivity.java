@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class GroupActivity extends AppCompatActivity {
@@ -31,11 +31,11 @@ public class GroupActivity extends AppCompatActivity {
     private Users member;
     private DatabaseReference findUser;
     private FirebaseAuth mAuth;
-    TextView a, b;
 
     private ListView list_view;
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> list_of_groups = new ArrayList<>();
+    private String currentGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,26 +43,27 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
 
         mAuth = FirebaseAuth.getInstance();
-        findUser = FirebaseDatabase.getInstance().getReference().child("Users");
+        findUser = FirebaseDatabase.getInstance().getReference();
 
         list_view = findViewById(R.id.list_view); //FEHerquelle
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
 
 
-        //currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
-        //Toast.makeText(this, currentGroupName, Toast.LENGTH_SHORT).show();
+        currentGroupName = getIntent().getExtras().get("Gruppenname").toString();
+
+        RetrieveAndDisplayUsers();
 
         FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //Kann man umbenennen wenn man will
                 addUserRequest();
-                //   Intent intent = new Intent(GroupActivity.this, AddEditNoteActivity.class);
-                //  startActivityForResult(intent, ADD_NOTE_REQUEST );
             }
         });
     }
+
+    //User zu der Gruppe hinzufügen
 
     private void addUserRequest() {
 
@@ -80,42 +81,28 @@ public class GroupActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(Username)) {
                     Toast.makeText(GroupActivity.this, "Bitte Username einfügen", Toast.LENGTH_SHORT).show();
                 } else {
-                    findUser.addValueEventListener(new ValueEventListener() {
+                    findUser.child("Users").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Set<String> set = new HashSet<String>();
-                           // Iterator iterator = dataSnapshot.getChildren().iterator();
 
                             String Username = UserNameField.getText().toString();
 
-                            for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                                 Users users = childSnapshot.getValue(Users.class);
                                 set.add(users.getUser());
-                                if(set.contains(Username)){
+                                if (users.getUser().equals(Username)) {
+                                    Toast.makeText(GroupActivity.this, users.getUser(), Toast.LENGTH_SHORT).show();
                                     member = users;
+
+                                } else {
+                                    Toast.makeText(GroupActivity.this, "FUUUUCK", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            list_of_groups.clear();
-                           // list_of_groups.addAll(member.getUser().toString());
+                            findUser.child("Groups").child(currentGroupName).child("Mitglieder").child(member.getUser()).setValue(member);
+                            // list_of_groups.clear();
+                            list_of_groups.add(member.getUser());
                             arrayAdapter.notifyDataSetChanged();
-
-                        /*   while (iterator.hasNext()) {
-                                // member = iterator.toString();
-                                set.add(((DataSnapshot) iterator.next()).getKey());
-                                if (set.contains("-LzMYcpgoH2wSzQHEv6i")) {
-                                    for (String s:set){
-                                        for(String p : dataSnapshot.getChildren())
-                                        if (s.equalsIgnoreCase(Username)) {
-                                            s = Username;
-                                        }
-                                        list_of_groups.clear();
-                                        list_of_groups.add(s);
-                                        arrayAdapter.notifyDataSetChanged();
-                                    }
-                                } else {
-                                    Toast.makeText(GroupActivity.this, "Person nicht gefunden BITCH", Toast.LENGTH_SHORT).show();
-                                }
-                            }*/
                         }
 
                         @Override
@@ -138,10 +125,27 @@ public class GroupActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void addUserToGroup(String username, String member) {
-        //   if(username == member ){
+    private void RetrieveAndDisplayUsers() {
+        findUser.child("Groups").child(currentGroupName).child("Mitglieder").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Set<String> set = new HashSet<>();
+                Iterator iterator = dataSnapshot.getChildren().iterator();
 
-        //   }
+                while (iterator.hasNext()) {
+                    set.add(((DataSnapshot) iterator.next()).getKey());
+                }
 
+                list_of_groups.clear();
+                list_of_groups.addAll(set);
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
 }

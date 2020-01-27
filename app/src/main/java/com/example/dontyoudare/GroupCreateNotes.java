@@ -18,7 +18,6 @@ public class GroupCreateNotes extends AppCompatActivity {
     private EditText aufgabeUser, rulesUser;
     private ImageView proofpicUser;
     private DatabaseReference RootRef;
-    private Task1 task1;
     private String currentGroupName;
 
     @Override
@@ -64,8 +63,8 @@ public class GroupCreateNotes extends AppCompatActivity {
 
         String titel = aufgabeUser.getText().toString().trim();
         String rules = rulesUser.getText().toString().trim();
-        RootRef.child(currentGroupName).child(titel).child("regel").setValue(rules);
-        RootRef.child(currentGroupName).child(titel).child("images").setValue("");
+        RootRef.child(currentGroupName).child("Tasks").child(titel).child("regel").setValue(rules);
+        RootRef.child(currentGroupName).child("Tasks").child(titel).child("images").setValue("");
 
 
     }

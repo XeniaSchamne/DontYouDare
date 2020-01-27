@@ -70,7 +70,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
                 .child(currentTaskName + ".jpg");
         pathReference = UserProofImageRef.child(currentGroupName+"/" + currentTaskName+"/"+currentTaskName +".jpg");*/
 
-        RootRef.child(currentGroupName).child(currentTaskName).addValueEventListener(new ValueEventListener() {
+        RootRef.child(currentGroupName).child("Tasks").child(currentTaskName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String rules = dataSnapshot.child("regel").getValue().toString();
@@ -121,7 +121,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
 
     private void updateNewTask() {
         String newRules = rulesUser.getText().toString().trim();
-        RootRef.child(currentGroupName).child(currentTaskName).child("regel").setValue(newRules);
+        RootRef.child(currentGroupName).child("Tasks").child(currentTaskName).child("regel").setValue(newRules);
 
     }
 
@@ -171,7 +171,7 @@ public class GroupTaskUpdateActivity extends AppCompatActivity {
                         final String downloadUrl = task.getResult().getStorage().getDownloadUrl().toString();
 
 
-                        RootRef.child(currentGroupName).child(currentTaskName).child("images").setValue(downloadUrl)
+                        RootRef.child(currentGroupName).child("Tasks").child(currentTaskName).child("images").setValue(downloadUrl)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
