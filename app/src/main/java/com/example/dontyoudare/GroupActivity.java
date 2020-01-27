@@ -95,8 +95,6 @@ public class GroupActivity extends AppCompatActivity {
                                     Toast.makeText(GroupActivity.this, users.getUser(), Toast.LENGTH_SHORT).show();
                                     member = users;
 
-                                } else {
-                                    Toast.makeText(GroupActivity.this, "FUUUUCK", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             findUser.child("Groups").child(currentGroupName).child("Mitglieder").child(member.getUser()).setValue(member);

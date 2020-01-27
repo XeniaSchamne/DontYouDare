@@ -23,10 +23,15 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private NoteViewModel noteViewModel;
     private DatabaseReference RootRef;
+    Users member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,11 +161,34 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Gründen", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String groupName = groupNameField.getText().toString();
+                final String groupName = groupNameField.getText().toString();
                 if (TextUtils.isEmpty(groupName)){
                     Toast.makeText(MainActivity.this,"Bitte Gruppenname einfügen", Toast.LENGTH_SHORT).show();
                 }else{
                     CreateNewGroup(groupName);
+                    RootRef.child("Users").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Set<String> set = new HashSet<String>();
+
+                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                Users users = childSnapshot.getValue(Users.class);
+                                set.add(users.getUser());
+                                if (users.getUserId().equals(currentUser.getUid())) {
+                                    Toast.makeText(MainActivity.this, users.getUser(), Toast.LENGTH_SHORT).show();
+                                    member = users;
+
+                                }
+                            }
+                            RootRef.child("Groups").child(groupName).child("Mitglieder").child(member.getUser()).setValue(member);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
         });
@@ -190,9 +219,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.delete_all_notes:
                 noteViewModel.deleteAllNotes();
                 Toast.makeText(this, "Alle Aufgaben gelöscht", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.main_find_friends_option:
-                //TODO muss noch implementiert werden
                 return true;
             case R.id.main_create_group_option:
                 RequestNewGroup();
